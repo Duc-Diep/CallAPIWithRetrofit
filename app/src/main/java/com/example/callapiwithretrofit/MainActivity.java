@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.example.callapiwithretrofit.api.ApiService;
 import com.example.callapiwithretrofit.model.Account;
+import com.example.callapiwithretrofit.model.AccountDTO;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-    Button btnGet,btnPost;
+    Button btnGet,btnPost,btnPatch,btnDelete;
     TextView tvResult;
 
     @Override
@@ -30,6 +31,45 @@ public class MainActivity extends AppCompatActivity {
         });
         btnPost.setOnClickListener(v -> {
             sendPost();
+        });
+        btnPatch.setOnClickListener(v -> {
+            sendPatch();
+        });
+        btnDelete.setOnClickListener(v -> {
+            sendDelete();
+        });
+    }
+
+    private void sendDelete() {
+        ApiService.apiService.deleteAccount(57).enqueue(new Callback<Account>() {
+            @Override
+            public void onResponse(Call<Account> call, Response<Account> response) {
+                Toast.makeText(MainActivity.this, "Delete Success", Toast.LENGTH_SHORT).show();
+                String text = response.toString();
+                tvResult.setText("Xóa thành công" + text);
+            }
+
+            @Override
+            public void onFailure(Call<Account> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Delete Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sendPatch() {
+        AccountDTO accountDTO = new AccountDTO("ChangePass");
+        ApiService.apiService.updateAccount(66,accountDTO).enqueue(new Callback<Account>() {
+            @Override
+            public void onResponse(Call<Account> call, Response<Account> response) {
+                Toast.makeText(MainActivity.this, "Update Success", Toast.LENGTH_SHORT).show();
+                String text = response.body().toString();
+                    tvResult.setText(text);
+            }
+
+            @Override
+            public void onFailure(Call<Account> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Patch Error", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -77,5 +117,7 @@ public class MainActivity extends AppCompatActivity {
         btnGet = findViewById(R.id.btnGet);
         tvResult = findViewById(R.id.tvResult);
         btnPost = findViewById(R.id.btnPost);
+        btnPatch = findViewById(R.id.btnPatch);
+        btnDelete = findViewById(R.id.btnDelete);
     }
 }
