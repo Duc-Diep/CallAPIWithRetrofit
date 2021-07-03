@@ -13,6 +13,8 @@ import com.example.callapiwithretrofit.model.AccountDTO;
 
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,28 +43,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendDelete() {
-        ApiService.apiService.deleteAccount(57).enqueue(new Callback<Account>() {
+        ApiService.apiService.deleteAccount(71).enqueue(new Callback<Account>() {
             @Override
             public void onResponse(Call<Account> call, Response<Account> response) {
                 Toast.makeText(MainActivity.this, "Delete Success", Toast.LENGTH_SHORT).show();
                 String text = response.toString();
-                tvResult.setText("Xóa thành công" + text);
+                tvResult.setText("Delete Success" + text);
             }
 
             @Override
             public void onFailure(Call<Account> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Delete Error", Toast.LENGTH_SHORT).show();
+                tvResult.setText("Delete Error"+t.toString());
             }
         });
     }
 
     private void sendPatch() {
         AccountDTO accountDTO = new AccountDTO("ChangePass");
-        ApiService.apiService.updateAccount(66,accountDTO).enqueue(new Callback<Account>() {
+//        String newPass = "newPass";
+//        RequestBody strPassword = RequestBody.create(MediaType.parse("multipart/form-data"),newPass);
+        ApiService.apiService.updateAccount(56,accountDTO).enqueue(new Callback<Account>() {
             @Override
             public void onResponse(Call<Account> call, Response<Account> response) {
                 Toast.makeText(MainActivity.this, "Update Success", Toast.LENGTH_SHORT).show();
-                String text = response.body().toString();
+                String text = response.toString();
                     tvResult.setText(text);
             }
 
